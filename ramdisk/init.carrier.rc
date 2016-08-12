@@ -1,0 +1,158 @@
+# Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of Code Aurora nor
+#       the names of its contributors may be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
+on init
+
+# permissions for bluetooth.
+    setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
+    chown bluetooth net_bt_stack ro.bt.bdaddr_path
+
+# efs
+    mkdir /efs/drm 0700 system system
+    mkdir /efs/imei 0775 radio radio
+    restorecon -R /efs
+
+# Latin SMS
+    mkdir /efs/SMS 0775 system radio
+    chown system radio /efs/SMS
+    chmod 0775 /efs/SMS
+
+# multisim framework
+    setprop ro.multisim.simslotcount 2
+    
+on fs
+
+#++latin_mm:lkj for MobileTV [ISDBT]
+    mkdir /data/one-seg 0775 system system
+    chown system system /data/one-seg
+    chmod 0775 /data/one-seg
+#--latin_mm:lkj for MobileTV [ISDBT]
+
+on boot
+
+# RTCC Swappiness
+    write /proc/sys/vm/swappiness 100
+
+# tsp
+    chown system radio /sys/class/sec/tsp/cmd
+    chmod 0660 /sys/class/input/input0/enabled
+    chown system system /sys/class/input/input0/enabled
+
+# lcd
+    chown system radio /sys/class/lcd/panel/clk_mode
+
+# camera_flash
+    chmod 0660 /sys/class/camera/flash/rear_flash
+    chown system system /sys/class/camera/flash/rear_flash
+
+# fm_radio
+    chmod 0640 /dev/radio0
+    chown system fm_radio /dev/radio0
+
+# adsp
+    chmod 0660 /dev/adsprpc-smd
+    chown system system /dev/adsprpc-smd
+
+# for multi rild
+service ril-daemon2 /system/bin/rild -s rild1 -ds rild-debug1 -l /system/lib/libsec-ril-dsds.so
+    class main
+    socket rild1 stream 660 root radio
+    socket rild-debug1 stream 660 radio system
+    user root
+    group radio cache inet misc audio log qcom_diag sdcard_r shell sdcard_rw system drmrpc
+
+service mobex-daemon /system/bin/npsmobex
+    class main
+    user system
+    group system radio inet sdcard_r sdcard_rw media_rw shell
+    
+
+service DR-daemon /system/bin/ddexe
+    class main
+    user root
+    group system radio inet net_raw
+
+service KIES-daemon /system/bin/kiesexe
+    class main
+    user root
+    group system radio inet net_raw
+
+service SMD-daemon /system/bin/smdexe
+    class main
+    user root
+    group system radio inet net_raw
+
+service DTT-daemon /system/bin/dttexe
+    class main
+    user root
+    group system radio inet net_raw
+
+service BCS-daemon /system/bin/connfwexe
+    class main
+    user root
+    group system radio inet net_raw    
+
+service at_distributor /system/bin/at_distributor
+    class late_start
+    user root
+    group radio log
+
+service diag_uart_log /system/bin/diag_uart_log
+    class main
+    user root
+    group radio
+
+service media /system/bin/mediaserver
+    class main
+    user media
+    group system audio camera inet net_bt net_bt_admin net_bw_acct drmrpc qcom_diag sdcard_rw sdcard_r media_rw shell lgt_gid mediadrm
+    ioprio rt 4
+
+service powersnd /system/bin/samsungpowersoundplay
+    class main
+    user media
+    group system
+    disabled
+    oneshot
+
+# RTCC INIT
+service rtccd /system/bin/rtccd2 -a 200M
+    class core
+    user root
+    oneshot
+
+#++latin_mm:lkj for MobileTV [ISDBT]
+service mobileTV /system/bin/broadcastProcessObserver_ltn
+    class main
+    user system
+    group system audio camera graphics inet net_bt net_bt_admin net_raw sdcard_rw shell
+
+service smplayer /system/bin/OneSegSMPlayer
+    class main
+    user system
+    group system audio media camera graphics inet net_bt net_bt_admin net_raw sdcard_rw shell
+#--latin_mm:lkj for MobileTV [ISDBT]

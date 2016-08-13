@@ -32,6 +32,6 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x105c0000
 BOARD_FLASH_BLOCK_SIZE := 131072
 
 # We are using the SM-G3502T prebuilt kernel for now.
-TARGET_PREBUILT_KERNEL := device/samsung/cs02ve3gdtv/kernel
+TARGET_PREBUILT_KERNEL := device/samsung/cs02ve/kernel
 
 BOARD_HAS_NO_SELECT_BUTTON := true

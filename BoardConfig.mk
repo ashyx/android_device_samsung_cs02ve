@@ -41,6 +41,7 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 
 #Make sure you downloaded omnirom/android_bootable_recovery into bootable/recovery-twrp
 RECOVERY_VARIANT := twrp
+DEVICE_RESOLUTION := 800x480
 TW_THEME := portrait_mdpi
 RECOVERY_SDCARD_ON_DATA := true
 BOARD_HAS_NO_REAL_SDCARD := false

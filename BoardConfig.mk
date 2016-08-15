@@ -24,12 +24,12 @@ BOARD_KERNEL_PAGESIZE := 2048
 # Assert (please use cs02ve for the qcom variants)
 TARGET_OTA_ASSERT_DEVICE := cs02ve,cs02ve3g,cs02ve3gss,cs02ve3gdtv
 
-# Waiting for sizes. Not valid atm. Dummy values to make building possible
-BOARD_BOOTIMAGE_PARTITION_SIZE := 10000000
-BOARD_RECOVERYIMAGE_PARTITION_SIZE := 10000000
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1400000000
-#BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x105c0000
-BOARD_FLASH_BLOCK_SIZE := 4096
+# Partition sizes
+BOARD_BOOTIMAGE_PARTITION_SIZE := 10485760 # mmcblk0p14, 10240 blocks
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 10485760 # mmcblk0p15, 10240 blocks
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1226833920 # mmcblk0p22, 1198080 blocks
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 2199558144 # mmcblk0p25, 2148006 blocks
+BOARD_FLASH_BLOCK_SIZE := 1024
 
 # We are using the SM-G3502T prebuilt kernel for now.
 TARGET_PREBUILT_KERNEL := device/samsung/cs02ve/kernel
@@ -39,8 +39,8 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 
 #TWRP
 
-#Make sure you downloaded omnirom/android_bootable_recovery into bootable/recovery-twrp
-RECOVERY_VARIANT := twrp
+#If uncommented, make sure you downloaded omnirom/android_bootable_recovery into bootable/recovery-twrp
+#RECOVERY_VARIANT := twrp
 DEVICE_RESOLUTION := 800x480
 TW_THEME := portrait_mdpi
 RECOVERY_SDCARD_ON_DATA := true

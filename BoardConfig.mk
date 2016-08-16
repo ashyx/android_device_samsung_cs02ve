@@ -55,3 +55,4 @@ TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel/brightness"
 TW_MAX_BRIGHTNESS := 255
 TW_INCLUDE_INJECTTWRP := true
 TWRP_EVENT_LOGGING := false
+TARGET_RECOVERY_FSTAB := recovery/root/etc/recovery.fstab

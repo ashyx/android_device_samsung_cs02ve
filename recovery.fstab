@@ -1,3 +1,4 @@
+#<mountpoint>	<fstype>	<device>						<device2>		<flags>
 /boot		emmc		/dev/block/platform/msm_sdcc.1/by-name/boot
 /recovery	emmc		/dev/block/platform/msm_sdcc.1/by-name/recovery
 /system		ext4		/dev/block/platform/msm_sdcc.1/by-name/system
